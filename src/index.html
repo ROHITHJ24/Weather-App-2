@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-200 min-h-screen flex flex-col  items-center justify-center px-4 sm:px-6 lg:px-8">
+
+    <div
+        class="bg-gradient-to-br from-blue-600 to-purple-600 p-4 sm:p-6 rounded-xl w-full max-w-md text-white shadow-lg">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-4">WEATHER APP</h1>
+
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-0 mb-4">
+            <input id="cityInput" type="text" placeholder="Search city...."
+                class="flex-1 p-2 outline-none rounded-md sm:rounded-l-md sm:rounded-r-none text-black">
+            <button id="searchBtn"
+                class="bg-orange-400 text-white px-4 py-2 rounded-md sm:rounded-r-md sm:rounded-l-none font-semibold hover:bg-orange-500 transition">Search</button>
+        </div>
+
+        <div id="weatherCard"
+            class="mt-4 p-4 bg-white bg-opacity-10 rounded-lg hidden border-2 border-white border-opacity-30">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+                <div class="text-center sm:text-left">
+                    <h2 id="cityName" class="text-xl sm:text-2xl font-bold"></h2>
+                    <p id="description" class="capitalize"></p>
+                </div>
+                <img id="icon" src="" alt="weather icon" class="w-16 h-16 mx-auto sm:mx-0">
+            </div>
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <p class="font-semibold">Temperature:</p>
+                    <p id="temperature"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">Humidity:</p>
+                    <p id="humidity"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">Wind Speed:</p>
+                    <p id="wind"></p>
+                </div>
+            </div>
+        </div>
+
+        <p id="error" class="text-red-200 mt-4 text-sm text-center hidden">City not found. Try again.</p>
+        <marquee behavior="scroll" direction="left" class="bg-black text-white mt-1 rounded-md w-auto">
+            Due to certain issue we cant display the weather details of all the Cities. Try searching for places like "New york","London","Tokyo","Delhi".</marquee>
+    </div>
+  
+
+
+
+    <script>
+        const weatherData = {
+            "new york": {
+                name: "New York, US",
+                description: "clear sky",
+                temperature: "22",
+                humidity: "60",
+                wind: "3.5",
+                icon: "01d"
+            },
+            "london": {
+                name: "London, UK",
+                description: "light rain",
+                temperature: "17",
+                humidity: "70",
+                wind: "5.2",
+                icon: "10d"
+            },
+            "tokyo": {
+                name: "Tokyo, JP",
+                description: "few clouds",
+                temperature: "25",
+                humidity: "50",
+                wind: "2.1",
+                icon: "02d"
+            },
+            "delhi": {
+                name: "Delhi, IN",
+                description: "haze",
+                temperature: "33",
+                humidity: "45",
+                wind: "3.8",
+                icon: "50d"
+            }
+        };
+
+        function displayWeather(city) {
+            const weatherCard = document.getElementById("weatherCard");
+            const error = document.getElementById("error");
+
+            const data = weatherData[city.toLowerCase()];
+
+            if (!data) {
+                weatherCard.classList.add("hidden");
+                error.classList.remove("hidden");
+                return;
+            }
+
+            document.getElementById("cityName").innerText = data.name;
+            document.getElementById("description").innerText = data.description;
+            document.getElementById("temperature").innerText = `${data.temperature} °C`;
+            document.getElementById("humidity").innerText = `${data.humidity}%`;
+            document.getElementById("wind").innerText = `${data.wind} m/s`;
+            document.getElementById("icon").src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+
+            weatherCard.classList.remove("hidden");
+            error.classList.add("hidden");
+        }
+
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const input = document.getElementById("cityInput").value.trim();
+            if (input !== "") {
+                displayWeather(input);
+            }
+        });
+
+        // Show default city on page load
+        window.onload = () => {
+            displayWeather("Delhi");
+        };
+    </script>
+
+</body>
+
+</html>
